@@ -1,0 +1,15 @@
+html, body {
+    padding: 0;
+    margin: 0;
+    bottom: 0;
+    height: 50vh;
+    overflow: hidden;
+    background-color: darkcya
+}
+
+#map {
+	position: absolute;
+	bottom: 0;
+	height: 50vh;
+	width: 50vw;
+}
