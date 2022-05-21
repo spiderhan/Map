@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Han Map</title>
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+    <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
+
+
+
+</head>
+
+<body>
+    <h1>Map of Interesting Things</h1>
+    <div id="map" style="width:900px; height:580px"></div>
+
+    <script>
+
+        const my_magical_map = {}
+        // variables for the map
+
+        defaults = {
+            postCodeRegex: "([Gg][Ii][Rr] 0[Aa]{2})|((([A-Za-z][0-9]{1.2})|(([A-Za-z][A-Ha-hJ-Yj-y][0-9]{1.2})|(([A-Za-z][0-9][A-Za-z])|([A-Za-z][A-Ha-hJ-Yj-y][0-9][A-Za-z]?))))\s?[0-9][A-Za-z]{2})",
+            locations: './postcdes_again.json'
+        }
+        // Creating map options
+        const mapOptions = {
+            center: [53.295971, -2.725820],
+            zoom: 10
+        }
+
+        // json for map data
+        const mapLocations = {
+            1: {
+                name: "Frodsham",
+                location: [53.295971, -2.725820]
+            },
+            2: {
+                name: "Runcorn",
+                location: [53.335468, -2.728900]
+            },
+            3: {
+                name: "Liverpool",
+                location: [53.408056, -2.977778]
+            },
+            4: {
+                name: "Manchester",
+                location: [53.480556, -2.241667]
+            },
+            5: {
+                name: "Old address",
+                location: [53.302424, -2.7155154]
+            },
+            6: {
+                name: "New address",
+                location: [53.297935, -2.7161306]
+            }
+        }
+
+        const initialise = () => {
+            const map = new L.map('map', my_magical_map.mapOptions);
+            generateMap(map);
+            append_markers(map);
+        }
+
+        const generateMap = (map) => {
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+
+        };
+
+        const append_markers = (map) => {
+            // loop thorugh mapLocations
+            for (let key in my_magical_map.mapLocations) {
+                let marker = L.marker(my_magical_map.mapLocations[key].location).addTo(map);
+                marker.bindPopup(my_magical_map.mapLocations[key].name)
+            }
+
+
+
+            // todo put this somewhere else
+            var RADIUS = 500000;
+            var filterCircle = L.circle(L.latLng(40, -75), RADIUS, {
+                opacity: 1,
+                weight: 1,
+                fillOpacity: 0.4
+            }).addTo(map);
+
+map.on('mousemove', function(e) {
+    filterCircle.setLatLng(e.latlng);
+    csvLayer.setFilter(function showAirport(feature) {
+        return e.latlng.distanceTo(L.latLng(
+                feature.geometry.coordinates[1],
+                feature.geometry.coordinates[0])) < RADIUS;
+    });
+});
+        }
+        const click_events = () => {
+
+            // on map click show location
+            map.on('click', function (e) {
+                let location = e.latlng;
+                let marker = L.marker(location).addTo(map);
+                let popup = L.popup()
+                    .setLatLng(location)
+                    .setContent("You clicked the map at " + location.toString())
+                    .openOn(map);
+            });
+
+        }
+
+        const fetch_data = async () => {
+            // fetch json data 
+            fetch('./postcodes_again.json')
+                .then(response => response.json())
+        }
+
+        my_magical_map.defauls = defaults;
+        my_magical_map.mapOptions = mapOptions;
+        my_magical_map.mapLocations = mapLocations;
+        my_magical_map.initialise = initialise;
+        my_magical_map.generateMap = generateMap;
+        my_magical_map.append_markers = append_markers;
+        my_magical_map.click_events = click_events;
+        my_magical_map.fetch_data = fetch_data;
+
+
+        my_magical_map.initialise();
+
+    </script>
+</body>
+
+<body>
+
+</body>
+
+</html>

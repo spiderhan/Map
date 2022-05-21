@@ -1,0 +1,26 @@
+ {
+     1: {
+    name:"Frodsham",
+    location:[53.295971,-2.725820]
+},
+ 2: {
+    name:"Runcorn",
+    location: [53.335468, -2.728900]
+}, 
+3: {
+ name: "Liverpool", 
+ location: [53.408056, -2.977778]
+}, 
+4: {
+name:"Manchester",
+location: [53.480556, -2.241667]
+}, 
+5: {
+ name:"Old address",
+ location: [ 53.302424, -2.7155154]
+}, 
+6: {
+ name:"New address",
+location:[53.297935, -2.7161306]
+} 
+}
